@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: samplekube-docker
+spec:
+  selector:
+    app: samplekube-docker
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samplekube-docker
+spec:
+  selector:
+    matchLabels:
+      app: samplekube-docker
+  replicas: 0 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: samplekube-docker
+    spec:
+      containers:
+        - name: samplekube-docker
+          image: samplekube-docker
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
